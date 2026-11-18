@@ -9,15 +9,28 @@ class AutenticadorCertificadoCadastro implements ServicoCadastro
 {
     use Endpoint;
 
-    private string|int $idTribunal;
+    private string|int|array $idTribunal;
     private array $oab;
     private string|int $idCertificado;
+    private ?string $usuarioSigla;
+    private ?string $usuarioDescricao;
+    private ?string $secret;
 
-    public function __construct(string|int $idTribunal, array $oab, string|int $idCertificado)
+    public function __construct(
+        string|int|array $idTribunal,
+        array            $oab,
+        string|int       $idCertificado,
+        ?string          $usuarioSigla = null,
+        ?string          $usuarioDescricao = null,
+        ?string          $secret = null
+    )
     {
         $this->idTribunal = $idTribunal;
         $this->oab = $oab;
         $this->idCertificado = $idCertificado;
+        $this->usuarioSigla = $usuarioSigla;
+        $this->usuarioDescricao = $usuarioDescricao;
+        $this->secret = $secret;
     }
 
     public function getEndpoint(): string
@@ -34,6 +47,9 @@ class AutenticadorCertificadoCadastro implements ServicoCadastro
                 'oab_numero' => $this->oab['numero'],
                 'oab_letra' => $this->oab['letra'] ?? '',
                 'oab_uf' => $this->oab['uf'],
+                'usuario_sigla' => $this->usuarioSigla,
+                'usuario_descricao' => $this->usuarioDescricao,
+                'secret' => $this->secret,
             ]
         ];
     }

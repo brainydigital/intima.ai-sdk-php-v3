@@ -15,4 +15,9 @@ class Intimai
         $this->api = new API($apiToken, $opcoes);
         $this->servicos = new Servicos($this->api);
     }
+
+    public function definirCodigo2fa(string|callable|null $codigo): void
+    {
+        $this->api->definirCodigo2fa($codigo);
+    }
 }

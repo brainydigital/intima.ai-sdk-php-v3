@@ -15,7 +15,6 @@ class ConsultaSolicitacao implements ServicoSolicitacao
     private string $nomeRepresentante;
     private array $oab;
     private string $numeroDocumentoParte;
-    private string $token;
 
     public function __construct(
         string|int $idAutenticador,
@@ -23,8 +22,7 @@ class ConsultaSolicitacao implements ServicoSolicitacao
         string     $nomeParte = '',
         string     $nomeRepresentante = '',
         array      $oab = [],
-        string     $numeroDocumentoParte = '',
-        string     $token = ''
+        string     $numeroDocumentoParte = ''
     )
     {
         $this->idAutenticador = $idAutenticador;
@@ -33,7 +31,6 @@ class ConsultaSolicitacao implements ServicoSolicitacao
         $this->nomeRepresentante = $nomeRepresentante;
         $this->oab = $oab;
         $this->numeroDocumentoParte = $numeroDocumentoParte;
-        $this->token = $token;
     }
 
     public function getEndpoint(): string
@@ -51,7 +48,6 @@ class ConsultaSolicitacao implements ServicoSolicitacao
                 'nome_representante' => $this->nomeRepresentante,
                 'oab' => $this->oab,
                 'numero_documento_parte' => $this->numeroDocumentoParte,
-                'token' => $this->token,
             ]
         ];
     }

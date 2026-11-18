@@ -56,10 +56,6 @@ class ProtocoloProjudiSolicitacao implements ServicoSolicitacao
         $this->definirDocumentos($this->documentos, $parametrosParaMultiForm);
 
         return [
-            'headers' => [
-                'Accept' => 'application/json',
-                'User-Agent' => 'Intimai_SDK/3.0.0',
-            ],
             'multipart' => $this->definirMultiPart($parametrosParaMultiForm)
         ];
     }

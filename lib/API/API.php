@@ -2,142 +2,93 @@
 
 namespace Intimai\API;
 
+use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\GuzzleException;
 use Intimai\Exceptions\APIRequestException;
 
 class API
 {
     public const URL_BASE = 'https://app.intima.ai/api/v3';
+    public const USER_AGENT = 'Intimai_SDK/3.1.0';
+    public const HEADER_CODIGO_2FA = 'X-Codigo-2FA';
+
     private string $apiToken;
     private array $opcoesAPI;
     private Client $cliente;
+    private string|Closure|null $codigo2fa = null;
 
-    /**
-     * Construtor para instanciação da API.
-     * @param string $apiToken
-     * @param array $opcoes
-     */
     public function __construct(string $apiToken, array $opcoes = [])
     {
         $this->apiToken = $apiToken;
-        $this->cliente = new Client();
+        $this->definirCodigo2fa($opcoes['codigo_2fa'] ?? null);
+        unset($opcoes['codigo_2fa']);
         $this->opcoesAPI = $opcoes;
+        $this->cliente = new Client();
+    }
+
+    public function definirCodigo2fa(string|callable|null $codigo): void
+    {
+        $this->codigo2fa = is_callable($codigo) ? Closure::fromCallable($codigo) : $codigo;
     }
 
     private function getOpcoes(int $pagina = 1, array $filtros = [], array $request = []): array
     {
-        $opcoesPadrao = [
-            'base_uri' => self::URL_BASE,
-            'headers' => [
-                'Accept' => 'application/json',
-                'User-Agent' => 'Intimai_SDK/3.0.0',
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            'query' => [
-                'api_token' => $this->apiToken,
-                'page' => $pagina
-            ]
+        $headers = [
+            'Accept' => 'application/json',
+            'User-Agent' => self::USER_AGENT,
         ];
 
-        $opcoes = array_merge($opcoesPadrao, $this->opcoesAPI, $request);
-
-        if (!empty($filtros['filtros'])) {
-            foreach ($filtros['filtros'] as $chave => $valor) {
-                $opcoes['query'][$chave] = $valor;
-            }
+        if (!isset($request['multipart'])) {
+            $headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }
+
+        $codigo2fa = $this->codigo2fa instanceof Closure ? ($this->codigo2fa)() : $this->codigo2fa;
+
+        if ($codigo2fa !== null && $codigo2fa !== '') {
+            $headers[self::HEADER_CODIGO_2FA] = (string) $codigo2fa;
+        }
+
+        $opcoes = array_merge($this->opcoesAPI, $request);
+        $opcoes['headers'] = array_merge($headers, $this->opcoesAPI['headers'] ?? [], $request['headers'] ?? []);
+        $opcoes['query'] = array_merge(
+            ['api_token' => $this->apiToken, 'page' => $pagina],
+            $this->opcoesAPI['query'] ?? [],
+            $request['query'] ?? [],
+            $filtros['filtros'] ?? $filtros
+        );
 
         return $opcoes;
     }
 
-    /**
-     * Requisição post para a API.
-     * @param string $endpoint
-     * @param array $request
-     * @return array
-     * @throws APIRequestException
-     * @throws GuzzleException
-     */
+    private function requisitar(string $metodo, string $endpoint, array $opcoes): array
+    {
+        try {
+            $response = $this->cliente->request($metodo, self::URL_BASE . $endpoint, $opcoes);
+
+            return json_decode($response->getBody()->getContents(), true) ?? [];
+        } catch (BadResponseException $exception) {
+            throw APIRequestException::daResposta($exception);
+        }
+    }
+
     public function post(string $endpoint, array $request = []): array
     {
-        try {
-            $opcoes = $this->getOpcoes(request: $request);
-            $url = self::URL_BASE . $endpoint;
-
-            $response = $this->cliente->post($url, $opcoes);
-
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (BadResponseException $exception) {
-            throw new APIRequestException($exception->getMessage(), $exception->getCode(), $exception);
-        }
+        return $this->requisitar('POST', $endpoint, $this->getOpcoes(request: $request));
     }
 
-    /**
-     * Requisição get para a API.
-     * @param string $endpoint
-     * @param int $pagina
-     * @param array $filtros
-     * @param array $request
-     * @return array
-     * @throws APIRequestException
-     * @throws GuzzleException
-     */
     public function get(string $endpoint, int $pagina = 1, array $filtros = [], array $request = []): array
     {
-        try {
-            $opcoes = $this->getOpcoes($pagina, $filtros, $request);
-            $url = self::URL_BASE . $endpoint;
-
-            $response = $this->cliente->get($url, $opcoes);
-
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (BadResponseException $exception) {
-            throw new APIRequestException($exception->getMessage(), $exception->getCode(), $exception);
-        }
+        return $this->requisitar('GET', $endpoint, $this->getOpcoes($pagina, $filtros, $request));
     }
 
-    /**
-     * Requisição put para a API.
-     * @param string $endpoint
-     * @param array $request
-     * @return array
-     * @throws APIRequestException
-     * @throws GuzzleException
-     */
     public function put(string $endpoint, array $request = []): array
     {
-        try {
-            $opcoes = $this->getOpcoes(request: $request);
-            $url = self::URL_BASE . $endpoint;
-
-            $response = $this->cliente->put($url, $opcoes);
-
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (BadResponseException $exception) {
-            throw new APIRequestException($exception->getMessage(), $exception->getCode(), $exception);
-        }
+        return $this->requisitar('PUT', $endpoint, $this->getOpcoes(request: $request));
     }
 
-    /**
-     * Requisição delete para a API.
-     * @param string $endpoint
-     * @return array
-     * @throws APIRequestException
-     * @throws GuzzleException
-     */
     public function delete(string $endpoint): array
     {
-        try {
-            $opcoes = $this->getOpcoes();
-            $url = self::URL_BASE . $endpoint;
-
-            $response = $this->cliente->delete($url, $opcoes);
-
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (BadResponseException $exception) {
-            throw new APIRequestException($exception->getMessage(), $exception->getCode(), $exception);
-        }
+        return $this->requisitar('DELETE', $endpoint, $this->getOpcoes());
     }
 }

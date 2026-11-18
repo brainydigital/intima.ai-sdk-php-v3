@@ -104,7 +104,7 @@ try {
         Dia::SEXTA_FEIRA
     ];
     
-    // Horários no qual a captura será realizada
+    // Horários no qual a captura será realizada (no máximo 3)
     $horariosDeCaptura = [
         Horario::DEZ_HORAS,
         Horario::DEZOITO_HORAS
@@ -154,7 +154,7 @@ try {
         Dia::SEXTA_FEIRA
     ];
     
-    // Horários no qual a captura será realizada
+    // Horários no qual a captura será realizada (no máximo 3)
     $horariosDeCaptura = [
         Horario::DEZ_HORAS,
         Horario::DEZOITO_HORAS
@@ -207,5 +207,5 @@ try {
 ```
 
 [Voltar ao topo](#recurso-escutas)        
-[Voltar a lista da API](../../README.md#documentação-para-os-endpoints-da-api)    
-[Voltar para o README](../../README.md#intimaai---sdk-v3-php)
+[Voltar a lista da API](../../README.md#recursos)    
+[Voltar para o README](../../README.md#intimaai--sdk-v3-php)

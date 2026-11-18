@@ -12,7 +12,7 @@ class TipoDocumentoEprocBusca implements ServicoBusca
     private string|int $idProtocolo;
     private string|int|null $idEvento;
 
-    public function __construct(string|int $idProtocolo, string|int $idEvento = null)
+    public function __construct(string|int $idProtocolo, string|int|null $idEvento = null)
     {
         $this->idProtocolo = $idProtocolo;
         $this->idEvento = $idEvento;

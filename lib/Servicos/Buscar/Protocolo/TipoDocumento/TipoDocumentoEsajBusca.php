@@ -12,7 +12,7 @@ class TipoDocumentoEsajBusca implements ServicoBusca
     private string|int $idProtocolo;
     private string|int|null $idClasse;
 
-    public function __construct(string|int $idProtocolo, string|int $idClasse = null)
+    public function __construct(string|int $idProtocolo, string|int|null $idClasse = null)
     {
         $this->idProtocolo = $idProtocolo;
         $this->idClasse = $idClasse;

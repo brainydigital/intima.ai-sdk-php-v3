@@ -11,7 +11,7 @@ class AutenticadorBusca implements ServicoBusca
 
     private string|int|null $id;
 
-    public function __construct(string|int $id = null)
+    public function __construct(string|int|null $id = null)
     {
         $this->id = $id;
     }

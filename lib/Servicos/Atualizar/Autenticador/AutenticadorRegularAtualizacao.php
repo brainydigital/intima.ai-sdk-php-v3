@@ -12,12 +12,14 @@ class AutenticadorRegularAtualizacao implements ServicoAtualizacao
     private string|int $id;
     private ?string $usuario;
     private ?string $senha;
+    private string|int|null $idCertificado;
 
-    public function __construct(string|int $id, string $usuario = null, string $senha = null)
+    public function __construct(string|int $id, ?string $usuario = null, ?string $senha = null, string|int|null $idCertificado = null)
     {
         $this->id = $id;
         $this->usuario = $usuario;
         $this->senha = $senha;
+        $this->idCertificado = $idCertificado;
     }
 
     public function getEndpoint(): string
@@ -30,7 +32,9 @@ class AutenticadorRegularAtualizacao implements ServicoAtualizacao
         return [
             'form_params' => [
                 'usuario' => $this->usuario,
-                'senha' => $this->senha]
+                'senha' => $this->senha,
+                'certificado_id' => $this->idCertificado,
+            ]
         ];
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "brainydigital/intima.ai-sdk-php",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Implementação da API do Intima.ai em forma de SDK Client para PHP.",
   "keywords": [
     "intimai",
@@ -10,8 +10,17 @@
     "sdk",
     "api"
   ],
-  "homepage": "https://intima.ai",
+  "homepage": "https://github.com/brainydigital/intima.ai-sdk-php-v3",
   "type": "library",
+  "source": {
+    "type": "git",
+    "url": "https://github.com/brainydigital/intima.ai-sdk-php-v3.git",
+    "reference": "main"
+  },
+  "support": {
+    "issues": "https://github.com/brainydigital/intima.ai-sdk-php-v3/issues",
+    "source": "https://github.com/brainydigital/intima.ai-sdk-php-v3"
+  },
   "license": "MIT",
   "authors": [
     {
@@ -28,5 +37,16 @@
     "psr-4": {
       "Intimai\\": "lib/"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Intimai\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
   }
 }

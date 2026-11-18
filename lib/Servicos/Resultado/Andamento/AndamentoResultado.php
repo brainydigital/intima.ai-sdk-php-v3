@@ -12,7 +12,7 @@ class AndamentoResultado implements ServicoResultado
     private string|int $id;
     private string|int|null $idProcesso;
 
-    public function __construct(string|int $id, string|int $idProcesso = null)
+    public function __construct(string|int $id, string|int|null $idProcesso = null)
     {
         $this->id = $id;
         $this->idProcesso = $idProcesso;

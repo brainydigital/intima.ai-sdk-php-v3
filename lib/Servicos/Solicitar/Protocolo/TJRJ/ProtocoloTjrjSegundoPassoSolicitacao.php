@@ -19,6 +19,7 @@ class ProtocoloTjrjSegundoPassoSolicitacao implements ServicoSolicitacao
     private array $partesVinculadas;
     private Peticao $peticao;
     private array $documentos;
+    private string|int|null $idCategoria;
 
     /**
      * @param string|int $id
@@ -27,13 +28,14 @@ class ProtocoloTjrjSegundoPassoSolicitacao implements ServicoSolicitacao
      * @param Peticao $peticao
      * @param Documento[] $documentos
      */
-    public function __construct(string|int $id, string|int $idClasse, array $partesVinculadas, Peticao $peticao, array $documentos = [])
+    public function __construct(string|int $id, string|int $idClasse, array $partesVinculadas, Peticao $peticao, array $documentos = [], string|int|null $idCategoria = null)
     {
         $this->id = $id;
         $this->idClasse = $idClasse;
         $this->partesVinculadas = $partesVinculadas;
         $this->peticao = $peticao;
         $this->documentos = $documentos;
+        $this->idCategoria = $idCategoria;
     }
 
     public function getEndpoint(): string
@@ -45,6 +47,7 @@ class ProtocoloTjrjSegundoPassoSolicitacao implements ServicoSolicitacao
     {
         $parametrosParaMultiForm = [
             'classe_id' => $this->idClasse,
+            'categoria_id' => $this->idCategoria,
         ];
 
         $this->definirPartes($this->partesVinculadas, $parametrosParaMultiForm);
@@ -54,10 +57,6 @@ class ProtocoloTjrjSegundoPassoSolicitacao implements ServicoSolicitacao
         $this->definirDocumentos($this->documentos, $parametrosParaMultiForm);
 
         return [
-            'headers' => [
-                'Accept' => 'application/json',
-                'User-Agent' => 'Intimai_SDK/3.0.0',
-            ],
             'multipart' => $this->definirMultiPart($parametrosParaMultiForm)
         ];
     }

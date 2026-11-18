@@ -13,4 +13,4 @@ $documento = new Documento(
 );
 ```
 
-[Voltar para o README](../../README.md#intimaai---sdk-v3-php)
+[Voltar para o README](../../README.md#intimaai--sdk-v3-php)

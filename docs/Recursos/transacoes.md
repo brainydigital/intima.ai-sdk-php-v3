@@ -31,5 +31,5 @@ try {
 ```
 
 [Voltar ao topo](#recurso-transações)        
-[Voltar a lista da API](../../README.md#documentação-para-os-endpoints-da-api)    
-[Voltar para o README](../../README.md#intimaai---sdk-v3-php)
+[Voltar a lista da API](../../README.md#recursos)    
+[Voltar para o README](../../README.md#intimaai--sdk-v3-php)

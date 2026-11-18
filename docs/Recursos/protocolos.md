@@ -106,14 +106,15 @@ try {
     // Estes tipos estão disponíveis no tribunal em questão, você pode buscar o tribunal e verificar os valores disponíveis.
     $tipoDocumentoMensagemGeral = 1;
     
-    // A petição é necessária para alguns tribunais (TRT por exemplo). Obs: você pode buscar os tipos disponóveis da petição ao buscar o tribunal em que se está protocolando
+    // A petição é obrigatória nos tribunais da Justiça do Trabalho (TRT) e proibida nos demais: fora do TRT, passe null e envie tudo em $documentos.
+    // Obs: você pode buscar os tipos disponíveis da petição ao buscar o tribunal em que se está protocolando
     $peticao = new Peticao('caminho/da/peticao', 12, 'descricao-peticao');
     
     $documentos = [
         new Documento('caminho/do/documento', 1, 21, 'descricao-doc')
     ];
      
-    // Obs: se o tribunal não precisar da petição basta não enviar
+    // Obs: fora do TRT, use null no lugar de $peticao
     $protocolo = new ProtocoloPjeSolicitacao(
         $idAutenticador,
         $numeroDoProcesso,
@@ -138,6 +139,34 @@ try {
 
 Protocolos no sistema PROJUDI são realizados em uma única etapa.
 
+Antes de protocolar, busque os tipos de documento mensagem geral disponíveis para o autenticador. A API responde 422 se o autenticador não for do PROJUDI e 404 se o tribunal não tiver nenhum tipo.
+
+```php
+<?php
+
+require_once(__DIR__ . '/vendor/autoload.php');
+
+use Intimai\Intimai;
+use Intimai\Servicos\Buscar\Protocolo\TipoDocumentoMensagemGeral\TipoDocumentoMensagemGeralProjudiBusca;
+use Intimai\Exceptions\APIRequestException;
+
+try {
+    $intimai = new Intimai('api_token');
+
+    $idAutenticador = 1; // ID do autenticador no Intima.ai
+
+    $resultado = $intimai->servicos->buscar(new TipoDocumentoMensagemGeralProjudiBusca($idAutenticador));
+
+    var_dump($resultado);
+} catch (APIRequestException $exception) {
+    var_dump($exception->getStatus(), $exception->getMensagem());
+}
+
+?>
+```
+
+Depois, solicite o protocolo:
+
 ```php
 <?php
 
@@ -154,7 +183,7 @@ try {
     $idAutenticador = 1; // ID do autenticador no Intima.ai
     $numeroDoProcesso = '00000000000000000000'; // Número do processo no tribunal
     
-    // Estes tipos estão disponíveis no tribunal em questão, você pode buscar o tribunal e verificar os valores disponíveis.
+    // Um dos tipos devolvidos por TipoDocumentoMensagemGeralProjudiBusca
     $tipoDocumentoMensagemGeral = 1;
     
     $documentos = [
@@ -255,7 +284,7 @@ try {
     
     // Array com as partes. Obs: a parte pode ter participação, verifique no tribunal
     $partesVinculadas = [
-        new ParteVinculada('nome-parte');
+        new ParteVinculada('nome-parte'),
     ];
     
     $peticao = new Peticao('caminho/da/peticao', 12, 'descricao-peticao');
@@ -353,7 +382,7 @@ try {
     
     // Array com as partes. Obs: a parte pode ter participação, verifique no tribunal
     $partesVinculadas = [
-        new ParteVinculada('nome-parte');
+        new ParteVinculada('nome-parte'),
     ];
     
     $documentos = [
@@ -448,7 +477,7 @@ try {
     
     // Array com as partes. Obs: a parte pode ter participação, verifique no tribunal
     $partesVinculadas = [
-        new ParteVinculada('nome-parte');
+        new ParteVinculada('nome-parte'),
     ];
     
     $peticao = new Peticao('caminho/da/peticao', 12, 'descricao-peticao');
@@ -457,12 +486,16 @@ try {
         new Documento('caminho/do/documento', 1, 21, 'descricao-doc')
     ];
      
+    // Obrigatório quando a classe escolhida tem categorias (veja as classes do protocolo)
+    $idCategoria = null;
+
     $segundaEtapa = new ProtocoloTjrjSegundoPassoSolicitacao(
         $idProtocolo,
         $idClasse,
         $partesVinculadas,
         $peticao,
-        $documentos
+        $documentos,
+        $idCategoria
     );
     
     $resultado = $intimai->servicos->solicitar($segundaEtapa); 
@@ -478,5 +511,5 @@ try {
 ```
 
 [Voltar ao topo](#recurso-protocolos)        
-[Voltar a lista da API](../../README.md#documentação-para-os-endpoints-da-api)    
-[Voltar para o README](../../README.md#intimaai---sdk-v3-php)
+[Voltar a lista da API](../../README.md#recursos)    
+[Voltar para o README](../../README.md#intimaai--sdk-v3-php)

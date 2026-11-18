@@ -46,6 +46,10 @@ trait Helpers
         $multipart = [];
 
         foreach ($parametrosParaMultiForm as $nome => $conteudo) {
+            if ($conteudo === null) {
+                continue;
+            }
+
             $multipart[] = [
                 'name' => $nome,
                 'contents' => $conteudo,

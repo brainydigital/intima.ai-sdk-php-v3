@@ -62,4 +62,14 @@ trait Endpoint
     protected const CLASSES_ENDPOINT = '/classes';
     protected const EVENTOS_ENDPOINT = '/eventos';
     protected const TIPOS_DOCUMENTO_MENSAGEM_GERAL_ENDPOINT = '/tipos-documento-mensagem-geral';
+    protected const CONFIRMAR_CONSULTA_ENDPOINT = '/confirmar-consulta';
+    protected const CANCELAR_CONSULTA_ENDPOINT = '/cancelar-consulta';
+    protected const ATUALIZAR_PERFIL_ENDPOINT = '/atualizar-perfil';
+    protected const CAPTURAR_INTIMACOES_ENDPOINT = '/capturar-intimacoes';
+    protected const HABILITAR_ENDPOINT = '/habilitar';
+    protected const DESABILITAR_ENDPOINT = '/desabilitar';
+    protected const DOIS_FATORES_ENDPOINT = '/2fa/armazenar';
+    protected const CONSUMO_MENSAL_ENDPOINT = '/consumo-mensal';
+    protected const CAPTURA_AGENDADA_ENDPOINT = '/captura-agendada';
+    protected const CODIGO_AJUDA_ENDPOINT = '/codigo-ajuda';
 }

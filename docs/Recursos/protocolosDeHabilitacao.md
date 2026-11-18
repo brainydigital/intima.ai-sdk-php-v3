@@ -149,19 +149,24 @@ try {
     // Estes tipos estão disponíveis no enum TipoSolicitacao
     $tipoSolicitacao = TipoSolicitacao::HABILITACAO_SIMPLES;
     
-    // Estes tipos estão disponíveis no enum TipoDeclaracao
+    // Estes tipos estão disponíveis no enum TipoDeclaracao (constantes TRT_* para a Justiça do Trabalho)
     $tipoDeclaracao = TipoDeclaracao::DECLARACAO_SOB_PENA_DE_LEI;
     
     // Estes polos estão disponíveis no enum Polo
     $polo = Polo::ATIVO;
     
-    // Array com as partes. Obs: a parte pode ter participação, verifique no tribunal
+    // Partes do polo escolhido: use o "nome" de cada parte em extra.processo_polos (polo_ativo ou polo_passivo)
+    // do protocolo de habilitação. Aceita ParteVinculada ou o nome direto.
     $partesVinculadas = [
-        new ParteVinculada('nome-parte');
+        new ParteVinculada('nome-parte'),
+        'outra-parte',
     ];
     
     // Estes tipos estão disponíveis no protocolo, você pode buscar o protocolo e verificar os valores disponíveis.
     $tipoDocumentoMensagemGeral = 1;
+
+    $descricao = 'descricao'; // Opcional
+    $mensagemGeral = 'mensagem-geral'; // Opcional
     
     $documentos = [
         new Documento('caminho/do/documento', 1, 21, 'descricao-doc')
@@ -192,5 +197,5 @@ try {
 ```
 
 [Voltar ao topo](#recurso-protocolos-de-habilitação)        
-[Voltar a lista da API](../../README.md#documentação-para-os-endpoints-da-api)    
-[Voltar para o README](../../README.md#intimaai---sdk-v3-php)
+[Voltar a lista da API](../../README.md#recursos)    
+[Voltar para o README](../../README.md#intimaai--sdk-v3-php)

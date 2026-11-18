@@ -28,10 +28,6 @@ class CertificadoSolicitacaoCadastro implements ServicoSolicitacaoCadastro
     public function getRequest(): array
     {
         return [
-            'headers' => [
-                'Accept' => 'application/json',
-                'User-Agent' => 'Intimai_SDK/3.0.0',
-            ],
             'multipart' => $this->certificado->emArray()
         ];
     }

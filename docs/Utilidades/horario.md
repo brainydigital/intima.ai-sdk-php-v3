@@ -37,4 +37,4 @@ VINTE_DUAS_HORAS | 22:00
 VINTE_TRES_HORAS | 23:00
 
 [Voltar ao topo](#utilidade-horário)         
-[Voltar para o README](../../README.md#intimaai---sdk-v3-php)
+[Voltar para o README](../../README.md#intimaai--sdk-v3-php)
